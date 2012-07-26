@@ -32,7 +32,21 @@ return array(
 
 	// application components
 	'components'=>array(
-		'user'=>array(
+
+        'viewRenderer' => array(
+            'class' => 'ext.ETwigViewRenderer',
+
+            // All parameters below are optional, change them to your needs
+            'fileExtension' => '.twig',
+            'options' => array(
+                'autoescape' => true,
+            ),
+            'globals' => array(
+                'html' => 'CHtml'
+            ),
+        ),
+
+        'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
