@@ -16,95 +16,124 @@
  */
 class Forum extends CActiveRecord
 {
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Forum the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return Forum the static model class
+     */
+    public static function model($className = __CLASS__)
+    {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return '{{forums}}';
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName()
+    {
+        return '{{forums}}';
+    }
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('name, group_name', 'required'),
-			array('is_active, sort_order', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>160),
-			array('group_name, redirect_url', 'length', 'max'=>80),
-			array('description, created_on, updated_at', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, is_active, sort_order, name, group_name, description, created_on, updated_at, redirect_url', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules()
+    {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('name, group_name', 'required'),
+            array('sort_order', 'numerical', 'integerOnly' => true),
+            array('is_active', 'boolean'),
+            array('name', 'length', 'min' => 3, 'max' => 160),
+            array('group_name, redirect_url', 'length', 'max' => 80),
+            array('redirect_url', 'url'),
+            array('created_on, updated_at', 'safe'),
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, is_active, name, group_name, created_on', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'is_active' => 'Is Active',
-			'sort_order' => 'Sort Order',
-			'name' => 'Name',
-			'group_name' => 'Group Name',
-			'description' => 'Description',
-			'created_on' => 'Created On',
-			'updated_at' => 'Updated At',
-			'redirect_url' => 'Redirect Url',
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations()
+    {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'topics' => array(self::HAS_MANY, 'Topic', 'forum_id', 'order' => 'created_at DESC', 'limit' => 10),
+            'posts' => array(self::HAS_MANY, 'Post', 'forum_id', 'order' => 'created_at DESC', 'limit' => 10),
+            'topicsCount' => array(self::STAT, 'Topic', 'forum_id'),
+            'postsCount' => array(self::STAT, 'Post', 'forum_id'),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'id' => 'ID',
+            'is_active' => 'Is Active',
+            'sort_order' => 'Sort Order',
+            'name' => 'Name',
+            'group_name' => 'Group Name',
+            'description' => 'Description',
+            'created_on' => 'Created On',
+            'updated_at' => 'Updated At',
+            'redirect_url' => 'Redirect Url',
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search()
+    {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('is_active',$this->is_active);
-		$criteria->compare('sort_order',$this->sort_order);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('group_name',$this->group_name,true);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('created_on',$this->created_on,true);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('redirect_url',$this->redirect_url,true);
+        $criteria = new CDbCriteria;
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
+        $criteria->compare('id', $this->id);
+        $criteria->compare('is_active', $this->is_active);
+        $criteria->compare('sort_order', $this->sort_order);
+        $criteria->compare('name', $this->name, true);
+        $criteria->compare('group_name', $this->group_name, true);
+        $criteria->compare('description', $this->description, true);
+        $criteria->compare('created_on', $this->created_on, true);
+        $criteria->compare('updated_at', $this->updated_at, true);
+        $criteria->compare('redirect_url', $this->redirect_url, true);
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
+
+    /**
+     * @return array relational scopes.
+     */
+    public function scopes()
+    {
+        return array(
+            'activeForum' => array('condition' => 'is_active=1', 'limit' => 1),
+            'activeSortedForums' => array('condition' => 'is_active=1', 'order' => 'group_name, sort_order DESC'),
+        );
+    }
+
+    // set the default date fields
+    protected function beforeSave()
+    {
+        if (parent::beforeSave()) {
+            if ($this->isNewRecord) {
+                $this->created_on = new CDbExpression('NOW()');
+            }
+            $this->updated_at = new CDbExpression('NOW()');
+        }
+    }
 }

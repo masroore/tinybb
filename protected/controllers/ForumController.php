@@ -8,6 +8,8 @@ class ForumController extends Controller
 	 */
 	public $layout='//layouts/column2';
 
+    public $defaultAction = 'list';
+
 	/**
 	 * @return array action filters
 	 */
