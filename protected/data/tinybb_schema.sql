@@ -3,7 +3,7 @@
 -- Server version:               5.5.25a - MySQL Community Server (GPL)
 -- Server OS:                    Win32
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2012-07-27 03:45:32
+-- Date/time:                    2012-07-27 03:58:44
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `tbb_users` (
   `username` varchar(32) NOT NULL,
   `display_name` varchar(48) NOT NULL,
   `password_hash` varchar(60) NOT NULL,
-  `password_salt` char(21) NOT NULL,
+  `password_salt` char(22) NOT NULL,
   `email` varchar(48) NOT NULL,
   `website` varchar(80) DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
