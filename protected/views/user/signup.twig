@@ -1,0 +1,89 @@
+{% extends 'views/layouts/main.twig' %}
+{% block title %} {{ App.name }} - Login{% endblock %}
+
+{% set bcs = ['Signup'] %}
+{% block content %}
+<h1>Sign-up</h1>
+<p>Please fill out the following form with your login credentials:</p>
+<div class="form">
+    {% set form = this.beginWidget('CActiveForm', {
+	'id':'login-form',
+	'enableClientValidation':true,
+	'clientOptions':{
+		'validateOnSubmit':true,
+	},
+}) %}
+
+
+    <p class="note">Fields with <span class="required">*</span> are required.</p>
+
+    {{ form.errorSummary(model) }}
+
+    <div class="row">
+        {{ form.labelEx(model,'username')|raw }}
+        {{ form.textField(model,'username')|raw }}
+        {{ form.error(model,'username')|raw }}
+    </div>
+
+    <div class="row">
+        {{ form.labelEx(model,'password')|raw }}
+        {{ form.passwordField(model,'password')|raw }}
+        {{ form.error(model,'password')|raw }}
+    </div>
+
+    <div class="row">
+        {{ form.labelEx(model,'password_confirmation')|raw }}
+        {{ form.passwordField(model,'password_confirmation')|raw }}
+        {{ form.error(model,'password_confirmation')|raw }}
+    </div>
+
+    <div class="row">
+        {{ form.labelEx(model,'display_name')|raw }}
+        {{ form.textField(model,'display_name')|raw }}
+        {{ form.error(model,'display_name')|raw }}
+    </div>
+
+    <div class="row">
+        {{ form.labelEx(model,'email')|raw }}
+        {{ form.textField(model,'email')|raw }}
+        {{ form.error(model,'email')|raw }}
+    </div>
+
+    <div class="row">
+        {{ form.labelEx(model,'facebook')|raw }}
+        {{ form.textField(model,'facebook')|raw }}
+        {{ form.error(model,'facebook')|raw }}
+    </div>
+    <div class="row">
+        {{ form.labelEx(model,'twitter')|raw }}
+        {{ form.textField(model,'twitter')|raw }}
+        {{ form.error(model,'twitter')|raw }}
+    </div>
+    <div class="row">
+        {{ form.labelEx(model,'skype')|raw }}
+        {{ form.textField(model,'skype')|raw }}
+        {{ form.error(model,'skype')|raw }}
+    </div>
+    <div class="row">
+        {{ form.labelEx(model,'msn')|raw }}
+        {{ form.textField(model,'msn')|raw }}
+        {{ form.error(model,'msn')|raw }}
+    </div>
+    <div class="row">
+        {{ form.labelEx(model,'yahoo')|raw }}
+        {{ form.textField(model,'yahoo')|raw }}
+        {{ form.error(model,'yahoo')|raw }}
+    </div>
+
+    <div class="row">
+        {{ form.labelEx(model,'location')|raw }}
+        {{ form.textField(model,'location')|raw }}
+        {{ form.error(model,'location')|raw }}
+    </div>
+
+    <div class="row buttons">
+        {{ C.Html.submitButton('Sign-up')|raw }}
+    </div>
+    {{ void(this.endWidget()) }}
+</div><!-- form -->
+{% endblock %}
