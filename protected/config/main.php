@@ -42,7 +42,7 @@ return array(
                 'autoescape' => true,
             ),
             'globals' => array(
-                'html' => 'CHtml'
+                //'html' => 'CHtml'
             ),
         ),
 

@@ -27,7 +27,7 @@ class UserController extends Controller
     {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view'),
+                'actions' => array('index', 'view', 'signup'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -59,7 +59,7 @@ class UserController extends Controller
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
-    public function actionCreate()
+    public function actionSignup()
     {
         $form = new SignupForm();
 
@@ -76,7 +76,8 @@ class UserController extends Controller
                 //$user->attributes = $_POST['SignupForm'];
                 $user->username = $_POST['SignupForm']['username'];
                 $user->email = $_POST['SignupForm']['email'];
-                $user->password_hash = md5($_POST['SignupForm']['password']);
+                $pass = $_POST['SignupForm']['password'];
+                $user->applyPassword($pass);
                 $user->display_name = $_POST['SignupForm']['display_name'];
                 $user->is_admin = 0;
                 $user->is_active = 1;
@@ -134,7 +135,7 @@ class UserController extends Controller
             }
         }
         // display the login form
-        $this->render('signup', array('form' => $form));
+        $this->render('signup', array('model' => $form ));
 
         /*$users=new User;
           if(isset($_POST['Users']))

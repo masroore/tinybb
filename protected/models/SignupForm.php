@@ -22,7 +22,7 @@ class SignupForm extends CFormModel
             array('username', 'validateUsername'),
             array('email', 'email'),
             array('email', 'validateEmail'),
-            array('password', 'length', 'min' => 3),
+            array('password', 'length', 'min' => 3, 'max' => 16),
             array('password', 'compare', 'compareAttribute' => 'password_confirmation'),
             //array('verify_code', 'captcha', 'allowEmpty' => !extension_loaded('gd')),
             array('display_name, password_confirmation', 'safe'),);
@@ -36,8 +36,8 @@ class SignupForm extends CFormModel
             'display_name' => Yii::t('messages', 'Display Name (optional)'),
             'password' => Yii::t('messages', 'Password (must be at least 5 characters)'),
             'password_confirmation' => Yii::t('messages', 'Enter your password again'),
-            'openid_url' => Yii::t('messages', 'Identity Url'),
-            'verify_code' => Yii::t('messages', 'Verification Code'),
+            //'openid_url' => Yii::t('messages', 'Identity Url'),
+            //'verify_code' => Yii::t('messages', 'Verification Code'),
         );
     }
 

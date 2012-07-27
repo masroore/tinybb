@@ -274,4 +274,9 @@ class User extends CActiveRecord
 
         return crypt($password, $stored_hash) == $stored_hash;
     }
+
+    public function applyPassword($password) {
+        $this->password_salt = self::_generateSalt();
+        $this->password_hash = self::_hashPassword($password, $this->password_salt);
+    }
 }

@@ -10,7 +10,7 @@
 return array(
     '/' => 'forum/index',
     'rss.xml' => 'post/feed',
-    'signup' => 'user/create',
+    'signup' => 'user/signup',
     'settings' => 'user/edit',
     'login' => 'site/login',
     'logout' => 'site/logout',
