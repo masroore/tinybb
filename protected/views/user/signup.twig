@@ -8,7 +8,7 @@
 <div class="form">
     {{ CHtml.form()|raw }}
     {% set form = this.beginWidget('CActiveForm', {
-	'id':'login-form',
+	'id':'signup-form',
 	'enableClientValidation':true,
 	'clientOptions':{
 		'validateOnSubmit':true,
@@ -17,7 +17,9 @@
 
 
     <p class="note">Fields with <span class="required">*</span> are required.</p>
-    <p class="help">Logins should start with least 2 characters and may consist of letters, numbers, or the underscore.</p>
+
+    <p class="help">Logins should start with least 2 characters and may consist of letters, numbers, or the
+        underscore.</p>
     {{ CHtml.errorSummary(form)|raw }}
 
     <div class="row">
