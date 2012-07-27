@@ -22,6 +22,7 @@ class UserIdentity extends CUserIdentity
         $username = strtolower(trim($this->username));
         $user = User::model()->activeUser()->find('username=:uname', array(':uname' => $username));
 
+        //die(var_dump($user));
         if ($user === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         else if (!$user->validatePassword($this->password))

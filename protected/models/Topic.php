@@ -142,6 +142,8 @@ class Topic extends CActiveRecord
 
             $this->last_reply_on = new CDbExpression('NOW()');
         }
+
+        return true;
     }
 
     /**

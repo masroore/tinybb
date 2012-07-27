@@ -49,6 +49,8 @@ return array(
         'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+            // our extended CWebUser derivative class
+            'class' => 'application.components.EForumUser'
 		),
 		// uncomment the following to enable URLs in path-format
 		/*
@@ -80,7 +82,7 @@ return array(
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
+					'levels'=>'error, warning, info',
 				),
 				// uncomment the following to show log messages on web pages
 				/*

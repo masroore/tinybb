@@ -126,7 +126,7 @@ class Forum extends CActiveRecord
         );
     }
 
-    // set the default date fields
+    // set the default date fields before saving to the database
     protected function beforeSave()
     {
         if (parent::beforeSave()) {
@@ -135,5 +135,22 @@ class Forum extends CActiveRecord
             }
             $this->updated_at = new CDbExpression('NOW()');
         }
+
+        return true;
+    }
+
+    // fetches the last post made in the forum
+    public function getLastPostInForum()
+    {
+        $post = Post::model()->
+            with('poster')->
+            find(
+            array(
+                'condition' => 't.forum_id=:fid',
+                'params' => array(':fid' => $this->id),
+                'order' => 't.created_at DESC',
+                'limit' => 1));
+
+        return $post;
     }
 }

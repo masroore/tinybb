@@ -66,7 +66,7 @@ class User extends CActiveRecord
             array('display_name', 'length', 'min' => 4, 'max' => 48),
             array('email', 'email'),
             array('username, email', 'unique'),
-            array('password_salt', 'length', 'max' => 21),
+            array('password_salt', 'length', 'max' => 22),
             array('website, facebook, twitter', 'length', 'max' => 80),
             array('website', 'url'),
             array('signature', 'length', 'max' => 200),
@@ -190,11 +190,14 @@ class User extends CActiveRecord
         if (parent::beforeSave()) {
             if ($this->isNewRecord) {
                 $this->created_at = new CDbExpression('NOW()');
-                $this->last_login_at = new CDbExpression('NOW()');
-                $this->updated_at = new CDbExpression('NOW()');
                 $this->registration_ip = ip2long(self::_getUserIpAddr());
             }
+
+            $this->last_login_at = new CDbExpression('NOW()');
+            $this->updated_at = new CDbExpression('NOW()');
         }
+
+        return true;
     }
 
     // perform one-way hashing on the password before we store it in the database
@@ -202,9 +205,12 @@ class User extends CActiveRecord
     {
         parent::afterValidate();
         $this->password_salt = self::_generateSalt();
-        $this->password_hash = md5($this->password_hash . $this->password_salt);
+        $this->password_hash = self::_hashPassword($this->password_hash, $this->password_salt);
+        return true;
     }
 
+    // salt for bcrypt needs to be 22 base64 characters (but just [./0-9A-Za-z]), see http://php.net/crypt
+    // just an example; please use something more secure/random than sha1(microtime) :)
     private static function _generateSalt()
     {
         $salt = substr(str_replace('+', '.', base64_encode(sha1(microtime(true), true))), 0, 22);
@@ -240,11 +246,32 @@ class User extends CActiveRecord
 
     public function validatePassword($password)
     {
-        return self::_hashPassword($password, $this->password_salt) == $this->password_hash;
+        Yii::log("Validating password ...", CLogger::LEVEL_INFO, "default");
+        Yii::log("Given: " . $password, CLogger::LEVEL_INFO, "default");
+        //Yii::log("Stored salt: " . $this->password_salt, CLogger::LEVEL_INFO, "default");
+        Yii::log("Stored password hash: " . $this->password_hash, CLogger::LEVEL_INFO, "default");
+        Yii::log("Match? ==> " . self::_hashPassword($password, $this->password_hash), CLogger::LEVEL_INFO, "default");
+
+        return self::_checkPassword($password, $this->password_hash);
     }
 
+    // secure hashing of passwords using bcrypt, needs PHP 5.3+
     private static function _hashPassword($password, $salt)
     {
-        return md5($salt . $password);
+        if (version_compare(PHP_VERSION, '5.3') < 0)
+            throw new CException('Bcrypt requires PHP 5.3 or above!');
+
+        // 2a is the bcrypt algorithm selector
+        // 12 is the workload factor (around 300ms on my Core i7 machine), see http://php.net/crypt
+        $hash = crypt($password, '$2a$12$' . $salt);
+        return $hash;
+    }
+
+    private static function _checkPassword($password, $stored_hash)
+    {
+        if (version_compare(PHP_VERSION, '5.3') < 0)
+            throw new CException('Bcrypt requires PHP 5.3 or above!');
+
+        return crypt($password, $stored_hash) == $stored_hash;
     }
 }
