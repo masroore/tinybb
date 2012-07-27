@@ -1,0 +1,32 @@
+<div class="view">
+
+    <b>{{ C.Html.encode(data.getAttributeLabel('name')) }}:</b>
+    {% set link = ['forum/view?id=' + data.id] %}
+    {{ C.Html.link( C.Html.encode(data.name), link ) | raw }}
+    <br />
+
+    <b>{{ C.Html.encode(data.getAttributeLabel('is_active')) }}:</b>
+    {{ C.Html.encode(data.is_active) }}
+    <br />
+
+    <b>{{ C.Html.encode(data.getAttributeLabel('sort_order')) }}:</b>
+    {{ C.Html.encode(data.sort_order) }}
+    <br />
+
+    <b>{{ C.Html.encode(data.getAttributeLabel('id')) }}:</b>
+    {{ C.Html.encode(data.id) }}
+    <br />
+
+    <b>{{ C.Html.encode(data.getAttributeLabel('group_name')) }}:</b>
+    {{ C.Html.encode(data.group_name) }}
+    <br />
+
+    <b>{{ C.Html.encode(data.getAttributeLabel('description')) }}:</b>
+    {{ C.Html.encode(data.description) }}
+    <br />
+
+    <b>{{ C.Html.encode(data.getAttributeLabel('created_on')) }}:</b>
+    {{ C.Html.encode(data.created_on) }}
+    <br />
+
+</div>

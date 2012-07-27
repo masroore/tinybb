@@ -1,0 +1,10 @@
+{% extends "views/layouts/main.twig" %}
+
+{% block title %}{{ App.name }}{% endblock %}
+{% block content %}
+
+<h1>Forums</h1>
+
+{{ this.widget('zii.widgets.CListView', {'dataProvider': dataProvider,'itemView' : '_view'},true)|raw }}
+
+{% endblock %}
