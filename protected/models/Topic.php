@@ -135,7 +135,7 @@ class Topic extends CActiveRecord
         if (parent::beforeSave()) {
             if ($this->isNewRecord) {
                 $this->slug = self::slugify($this->title);
-                $this->created_at = new CDbException('NOW()');
+                $this->created_at = new CDbExpression('NOW()');
                 $user = User::model()->findByPk($this->poster_id);
                 $this->last_reply_user = $user->name;
             }
