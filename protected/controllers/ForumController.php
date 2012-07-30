@@ -130,9 +130,52 @@ class ForumController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new CActiveDataProvider('Forum');
+
+        $criteria = new CDbCriteria();
+        $criteria->order = 'group_name ASC, sort_order DESC, name ASC';
+        $forums = Forum::model()->with('topicsCount', 'postsCount', 'lastPost')->findAll($criteria);
+
+        $forum_groups = array();
+        foreach ($forums as $forum) {
+            $group_name = $forum['group_name'];
+            $forum_info = array();
+            $forum_info['forum_name'] = $forum['name'];
+            $forum_info['forum_description'] = $forum['description'];
+            $forum_info['sort_order'] = $forum['sort_order'];
+            $forum_info['forum_url'] = Yii::app()->createUrl('forum/view', array('id' => $forum['id'], 'slug' => Topic::slugify($forum['name'])));
+            if ($forum->lastPost) {
+                $forum_info['last_post_date'] = $forum->lastPost->created_at;
+                $forum_info['last_post_url'] = Yii::app()->createUrl('topic/view',
+                                    array('id' => $forum->lastPost->topic_id,
+                                        'slug' => Topic::slugify($forum['name'])));
+                $forum_info['last_post_user'] = User::fetchUserNameByPk($forum->lastPost->poster_id);
+            }
+            $forum_info['topics_count'] = $forum->topicsCount;
+            $forum_info['post_count'] = $forum->postsCount;
+
+            $forum_groups[$group_name]['forums'][] = $forum_info;
+        }
+
+        $rows = Topic::getLatestTopics();
+        $recent_topics = array();
+        foreach ($rows as $row) {
+            $the_topic = array();
+            $the_topic['url'] = Yii::app()->createUrl('topic/view',
+                array('id' => $row['id'],
+                    'slug' => Topic::slugify($row['title'])));
+            $the_topic['title'] = $row['title'];
+            $the_topic['last_reply_on'] = $row['last_reply_on'];
+            $the_topic['last_reply_user'] = $row['last_reply_user'];
+            $the_topic['num_hits'] = $row['num_hits'];
+
+            $recent_topics[] = $the_topic;
+        }
+
+        //$dataProvider = new CActiveDataProvider('Forum');
         $this->render('index', array(
-            'dataProvider' => $dataProvider,
+            //'dataProvider' => $dataProvider,
+            'forumGroups' => $forum_groups,
+            'recentTopics' => $recent_topics
         ));
     }
 
@@ -187,7 +230,32 @@ class ForumController extends Controller
               'order' => 'position',
               ));*/
 
-        $forums = Forum::model()->with('topicsCount', 'postsCount', 'last_post')->findAll();
+        $criteria = new CDbCriteria();
+        $criteria->order = 'group_name ASC, sort_order DESC, name ASC';
+        $forums = Forum::model()->with('topicsCount', 'postsCount', 'lastPost')->findAll($criteria);
+
+        $forum_groups = array();
+        foreach ($forums as $the_forum) {
+            $group_name = $the_forum['group_name'];
+            $topic = $the_forum->getLastPostInForum();
+
+            $group_data = array(
+                'id' => $the_forum['group_name'],
+                'url' => $the_forum['group_name'],
+                'sort_order' => $the_forum['sort_order'],
+                'name' => $the_forum['name'],
+                'description' => $the_forum['description'],
+                'topicsCount' => $the_forum['topicsCount'],
+                'postsCount' => $the_forum['postsCount'],
+            );
+
+            if ($topic) {
+                $group_data['last_topic_url'] = '';
+            }
+
+            $forum_groups[$group_name][] = $group_data;
+        }
+
 
         //die(var_dump($forums[0]->last_post));
 

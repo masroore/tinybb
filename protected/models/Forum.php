@@ -68,6 +68,7 @@ class Forum extends CActiveRecord
             'posts' => array(self::HAS_MANY, 'Post', 'forum_id', 'order' => 'created_at DESC', 'limit' => 10),
             'topicsCount' => array(self::STAT, 'Topic', 'forum_id'),
             'postsCount' => array(self::STAT, 'Post', 'forum_id'),
+            'lastPost' => array(self::HAS_ONE, 'Post', 'forum_id', 'order' => 'created_at DESC'),
         );
     }
 
@@ -143,7 +144,7 @@ class Forum extends CActiveRecord
     public function getLastPostInForum()
     {
         $post = Post::model()->
-            with('poster')->
+            with('poster', 'topic')->
             find(
             array(
                 'condition' => 't.forum_id=:fid',

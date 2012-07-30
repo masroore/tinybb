@@ -134,7 +134,7 @@ class Topic extends CActiveRecord
     {
         if (parent::beforeSave()) {
             if ($this->isNewRecord) {
-                $this->slug = self::_slugify($this->title);
+                $this->slug = self::slugify($this->title);
                 $this->created_at = new CDbException('NOW()');
                 $user = User::model()->findByPk($this->poster_id);
                 $this->last_reply_user = $user->name;
@@ -149,7 +149,7 @@ class Topic extends CActiveRecord
     /**
      * Modifies a string to remove al non ASCII characters and spaces.
      */
-    private static function _slugify($topic_title)
+    public static function slugify($topic_title)
     {
         // replace non letter or digits by -
         $topic_title = preg_replace('~[^\\pL\d]+~u', '-', trim($topic_title));
@@ -180,11 +180,11 @@ class Topic extends CActiveRecord
         if ($forum_id === false) {
             return self::model()->
                 with('poster')->
-                findAll(array('order' => 't.updated_at DESC', 'limit' => intval($limit)));
+                findAll(array('order' => 't.last_reply_on DESC', 'limit' => intval($limit)));
         } else {
             return self::model()->
                 with(array('poster' => array('condition' => 't.forum_id=' . intval($forum_id))))->
-                findAll(array('order' => 't.updated_at DESC', 'limit' => intval($limit)));
+                findAll(array('order' => 't.last_reply_on DESC', 'limit' => intval($limit)));
         }
     }
 

@@ -1,66 +1,98 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
 <head>
-{% block head %}
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="language" content="en" />
+    {% block head %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="language" content="en"/>
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="{{ App.request.baseUrl }}/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="{{ App.request.baseUrl }}/css/print.css" media="print" />
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="{{ App.request.baseUrl }}/css/ie.css" media="screen, projection" />
-	<![endif]-->
+    <link rel="stylesheet" type="text/css" href="{{ App.request.baseUrl }}/css/oxygen.css"
+    " />
+    <link rel="alternate" type="application/rss+xml" href="{{App.request.baseUrl}}feed/rss/" title="RSS"/>
+    <link rel="shortcut icon" href="{{App.request.baseUrl}}favicon.ico"/>
 
-	<link rel="stylesheet" type="text/css" href="{{ App.request.baseUrl }}/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="{{ App.request.baseUrl }}/css/form.css" />
-	
-	<title>{% block title %}{{ C.Html.encode(this.pageTitle) }}{% endblock %}</title>
-	
-{% endblock %}
+    <title>{% block title %}{{ C.Html.encode(this.pageTitle) }}{% endblock %}</title>
+
+    {% endblock %}
 </head>
 
 <body>
-<div class="container" id="page">
 
-	<div id="header">
-		<div id="logo">{{ C.Html.encode(App.name) }}</div>
-	</div><!-- header -->
 
-    <div id="mainmenu">
-		{{ this.widget('zii.widgets.CMenu',{
+<div id="brd-wrap" class="brd">
+
+    <div id="brd-index" class="brd-page basic-page">
+        <!-- page header -->
+        <div id="brd-head" class="gen-content">
+            <p id="brd-title"><a href="{{App.request.baseUrl}}">{{C.Html.encode(App.name)}}</a></p>
+
+            <p id="brd-desc">{{site_description}}</p>
+        </div>
+
+        <!-- top nav -->
+        <div id="brd-navlinks" class="gen-content">
+
+            {{ this.widget('zii.widgets.CMenu',{
 			'items': [
 				{'label':'Home', 'url':['/site/index'] },
 				{'label':'About', 'url':{'0': '/site/about'}},
-				{'label':'Contact', 'url':['/site/contact']},
-				{'label':'Login', 'url':['/site/login'], 'visible': App.user.isGuest},
-				{'label':'Logout', 'url':['/site/logout'], 'visible': not App.user.isGuest}
-			]
-		},true)|raw }}
-	</div><!-- mainmenu -->
+            {'label':'Contact', 'url':['/site/contact']},
+            {'label':'Login', 'url':['/site/login'], 'visible': App.user.isGuest},
+            {'label':'Logout', 'url':['/site/logout'], 'visible': not App.user.isGuest}
+            ]
+            },true)|raw }}
+        </div>
 
-    {% block breadcrumbs %}
-		{% if bcs %}
-			{{ this.widget('zii.widgets.CBreadcrumbs', {
-				'links' : bcs,
-			},true)|raw }}
-		{% endif %}
-	{% endblock %}
-	<div id="content">
-	{% block content %}
-		
-	{% endblock %}
-	</div>
+        <!-- if user.isGuest -->
+        {% if App.user.isGuest %}
+        <div id="brd-visit" class="gen-content">
+            <p id="welcome">{{login_reminder}}</p>
+        </div>
+        {% endif %}
+        <div class="hr">
+            <hr/>
+        </div>
 
-	<div class="clear"></div>
 
-	<div id="footer">
-		Copyright &copy; {{ now|date('Y') }} by My Company.<br/>
-		All Rights Reserved.<br/>
-		{{ Yii.powered()|raw }}
-	</div><!-- footer -->
+        <!-- content -->
+        <div id="brd-main">
+            {% block content %}
 
-</div><!-- page -->
+            {% endblock %}
+        </div>
+
+    </div>
+
+    <!-- content brd-main end -->
+    {%if show_index_stats %}
+    <!-- statistics: only on the front page -->
+    <div id="brd-stats" class="gen-content">
+        <h2 class="hn"><span>Forum statistics</span></h2>
+        <ul>
+            <li class="st-users"><span>Total number of registered users: <strong>{{users_count}}</strong></span></li>
+            <li class="st-activity"><span>Total number of topics: <strong>{{topics_count}}</strong></span></li>
+            <li class="st-activity"><span>Total number of posts: <strong>{{posts_count}}</strong></span></li>
+        </ul>
+    </div>
+    <!-- statistics end -->
+    {% endif %}
+
+    <div class="hr">
+        <hr/>
+    </div>
+
+    <!-- footer -->
+
+    <div id="brd-about">
+        <p id="copyright">Powered by <a href="https://github.com/masroore/tinybb" target="_blank">TinyBB</a>.</p>
+    </div>
+    <!-- footer end -->
+
+</div>
+<!-- brd-index -->
+
+</div>
+<!-- brd-wrap -->
 
 </body>
 </html>
+

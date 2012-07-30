@@ -63,6 +63,7 @@ class Post extends CActiveRecord
         return array(
             'poster' => array(self::BELONGS_TO, 'User', 'poster_id'),
             'forum' => array(self::BELONGS_TO, 'Forum', 'forum_id'),
+            'topic' => array(self::BELONGS_TO, 'Topic', 'topic_id'),
         );
     }
 

@@ -63,7 +63,7 @@ return array(
             'connectionString' => 'mysql:host=localhost;dbname=tinybb_dev',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => 'root',
+            'password' => '',
             'charset' => 'utf8',
             'tablePrefix' => 'tbb_',
         ),

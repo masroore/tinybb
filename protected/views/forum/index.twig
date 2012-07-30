@@ -3,8 +3,70 @@
 {% block title %}{{ App.name }}{% endblock %}
 {% block content %}
 
-<h1>Forums</h1>
+{% for group, forums_master in forumGroups %}
+<!-- forum group name -->
+    <div class="main-head">
+        <h2 class="hn"><span>{{group}}</span></h2>
+    </div>
 
-{{ this.widget('zii.widgets.CListView', {'dataProvider': dataProvider,'itemView' : '_view'},true)|raw }}
+<!-- forum table header -->
+<div class="main-subhead">
+    <p class="item-summary"><span><strong class="subject-title">Forums</strong> <strong class="info-topics">topics</strong>, <strong class="info-posts">posts</strong>, <strong class="info-lastpost">last post</strong></span></p>
+</div>
+    {% for forums in forums_master %}
+        {% for forum in forums %}
+        <!-- forum listing -->
+        <div class="main-content main-category">
+            <div class="main-item odd main-first-item">
+                <span class="icon "><!-- --></span>
+                <div class="item-subject">
+                    <h3 class="hn"><a href="{{forum.forum_url|raw}}48/"><span>{{forum.forum_name}}</span></a></h3>
+                    <p>{{forum.forum_description}}</p>
+                </div>
+                <ul class="item-info">
+                    <li class="info-topics"><strong>{{forum.topics_count}}</strong> <span class="label">topics</span></li>
+                    <li class="info-posts"><strong>{{forum.post_count}}</strong> <span class="label">posts</span></li>
+                    <li class="info-lastpost"><span class="label">Last post:</span> <strong><a href="{{forum.last_post_url|raw}}">{{forum.last_post_date}}</a></strong> <cite>by {{forum.last_post_user}}</cite></li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
+
+
+
+<!-- recent topics header -->
+<div class="main-head">
+    <h2 class="hn">Recent Topics</h2>
+</div>
+
+<!-- topics table header -->
+<div class="main-subhead">
+    <p class="item-summary forum-views"><span><strong class="subject-title">Topics</strong> <strong class="info-replies">replies</strong>, <strong class="info-posts">last post</strong>.</span></p>
+</div>
+
+{% for topic in recentTopics %}
+<!-- recent topics listing -->
+<div class="main-content main-forum forum-views">
+    <div class="main-item even normal">
+        <span class="icon normal"><!-- --></span>
+        <div class="item-subject">
+            <h3 class="hn"><a href="{{topic.url}}">{{topic.title}}</a></h3>
+            <p><span class="item-starter">by <cite>{{topic.topic_creator}}</cite></span></p>
+        </div>
+        <ul class="item-info">
+            <li class="info-replies"><strong>{{topic.posts_count}}</strong> <span class="label">replies</span></li>
+            <li class="info-lastpost"><span class="label">Last post</span> <strong>{{topic.last_reply_on}}</strong> <cite>by {{topic.last_reply_user}}</cite></li>
+        </ul>
+    </div>
+</div>
+{% else %}
+<div class="main-content main-forum forum-views">
+    <p style="text-align: center">No topics posted</p>
+</div>
+{% endfor %}
+
+<!-- this.widget('zii.widgets.CListView', {'dataProvider': dataProvider,'itemView' : '_view'},true)|raw -->
 
 {% endblock %}
