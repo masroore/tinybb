@@ -136,6 +136,8 @@ class Topic extends CActiveRecord
             if ($this->isNewRecord) {
                 $this->slug = self::slugify($this->title);
                 $this->created_at = new CDbExpression('NOW()');
+                $this->poster_id = Yii::app()->user->id;
+                // TODO: $this->forum_id = ??
                 $user = User::model()->findByPk($this->poster_id);
                 $this->last_reply_user = $user->name;
             }

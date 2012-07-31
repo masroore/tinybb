@@ -8,6 +8,16 @@
  */
 class TopicPostForm extends CFormModel
 {
+    public $title;
+    public $slug;
+    public $poster_id;
+    public $forum_id;
+    public $num_hits;
+    public $created_at;
+    public $topic_id;
+    public $last_reply_on;
+    public $last_reply_user;
+
     public function accessRules()
     {
         return array(
@@ -26,7 +36,7 @@ class TopicPostForm extends CFormModel
         // will receive user inputs.
         return array(
             // Topic
-            array('title, slug, poster_id, forum_id, num_hits, last_reply_user', 'required'),
+            array('title, body', 'required'),
             array('poster_id, forum_id, num_hits', 'numerical', 'integerOnly' => true),
             array('is_active, is_sticky, is_locked', 'boolean'),
             array('title', 'length', 'max' => 255),
@@ -66,5 +76,16 @@ class TopicPostForm extends CFormModel
         );
     }
 
-
+    // set some default values before creating a new record
+    protected function beforeSave()
+    {
+        // TODO: $this->forum_id
+        $this->slug = Topic::slugify($this->title);
+        $this->created_at = new CDbExpression('NOW()');
+        $this->poster_id = Yii::app()->user->id;
+        $user = User::model()->findByPk($this->poster_id);
+        $this->last_reply_user = $user->name;
+        $this->last_reply_on = new CDbExpression('NOW()');
+        $this->num_hits = 1;
+    }
 }
