@@ -1,0 +1,48 @@
+{% extends 'views/layouts/main.twig' %}
+{% block title %} {{ App.name }} - Create New Topic{% endblock %}
+
+{% set bcs = ['Create New Topic'] %}
+
+{% block content %}
+<div class="main-head">
+    <h2 class="hn"><span>Create New Topic</span></h2>
+</div>
+<div class="main-content main-frm">
+
+    {% set form = this.beginWidget('CActiveForm', {
+	'id':'topic-form',
+	'enableAjaxValidation':false}) %}
+
+    <div class="content-head">
+        {{ form.errorSummary( model ) }}
+        {{ form.errorSummary( post_model ) }}
+    </div>
+
+    <div class="txt-input">
+        <div class="sf-box text required longtext">
+        {{ form.labelEx(model,'title')|raw }}
+            <span class="fld-input">
+                {{ form.textField(model,'title', {'size': 82, 'maxlength': 255})|raw }}
+            </span>
+            {{ form.error(model,'title')|raw }}
+        </div>
+    </div>
+
+    <div class="txt-input">
+        <div class="sf-box text required longtext">
+            {{ form.labelEx(post_model, 'body')|raw }}
+            <span class="fld-input">
+                {{ form.textArea(post_model,'body', {'rows': 10, 'cols': 96})|raw }}
+            </span>
+            {{ form.error(post_model,'body')|raw }}
+        </div>
+    </div>
+
+
+    <div class="frm-buttons">
+        {{ C.Html.submitButton('Save')|raw }}
+    </div>
+
+    {{ void(this.endWidget()) }}
+</div>
+{% endblock %}

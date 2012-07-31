@@ -142,12 +142,12 @@ class ForumController extends Controller
             $forum_info['forum_name'] = $forum['name'];
             $forum_info['forum_description'] = $forum['description'];
             $forum_info['sort_order'] = $forum['sort_order'];
-            $forum_info['forum_url'] = Yii::app()->createUrl('forum/view', array('id' => $forum['id'], 'slug' => Topic::slugify($forum['name'])));
+            $forum_info['forum_url'] = Yii::app()->createUrl( 'forum/view', array( 'id' => $forum['id'], 'slug' => Topic::slugify( $forum['name'] ) ) );
             if ($forum->lastPost) {
                 $forum_info['last_post_date'] = $forum->lastPost->created_at;
-                $forum_info['last_post_url'] = Yii::app()->createUrl('topic/view',
-                                    array('id' => $forum->lastPost->topic_id,
-                                        'slug' => Topic::slugify($forum['name'])));
+                $forum_info['last_post_url'] = Yii::app()->createUrl( 'topic/view',
+                                    array(  'id' => $forum->lastPost->topic_id,
+                                            'slug' => Topic::slugify( $forum['name'] ) ) );
                 $forum_info['last_post_user'] = User::fetchUserNameByPk($forum->lastPost->poster_id);
             }
             $forum_info['topics_count'] = $forum->topicsCount;

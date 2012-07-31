@@ -62,6 +62,7 @@ class TopicController extends Controller
 	public function actionCreate()
 	{
 		$model=new Topic;
+        $post_model = new Post;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -75,6 +76,7 @@ class TopicController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
+            'post_model' => $post_model,
 		));
 	}
 
